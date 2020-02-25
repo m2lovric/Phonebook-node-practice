@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 let persons = [
     {
         name : "Matteo",
-        number : "095-522-0026",
+        number : "095-225-883",
         id : 1
     },
     {
@@ -18,6 +19,8 @@ let persons = [
         id : 3
     }
 ]
+
+app.use(bodyParser.json());
 
 app.get('/info', (req, res) => {
     let date = Date();
@@ -48,6 +51,35 @@ app.delete('/api/persons/:id', (req, res) => {
     persons = persons.filter(el => el.id !== id);
     console.log(persons);
     res.status(204).end();
+});
+
+const getId = () => {
+    const maxId = persons.length > 0 ? Math.max(...persons.map(el => el.id)) : 0;
+    return maxId + 1;
+}
+
+app.post('/api/persons', (req,res) => {
+    const body = req.body;
+    console.log(body);
+    console.log(body.name);
+    if(!body.name || !body.number){
+        return res.status(400).json({
+            error: 'content missing'
+        })
+    }else if (persons.find(el => el.name === body.name)){
+        return res.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: getId()
+    }
+    console.log(person);
+    persons = persons.concat(person);
+
+    res.json(person);
 });
 
 const port = 3030;
