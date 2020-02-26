@@ -7,7 +7,7 @@ const morgan = require('morgan');
 
 app.use(bodyParser.json());
 
-app.use(morgan);
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 let persons = [
     {
@@ -43,8 +43,6 @@ const getId = () => {
 
 app.post('/api/persons', (req,res) => {
     const body = req.body;
-    console.log(body);
-    console.log(body.name);
     if(!body.name){
         return res.status(400).json({
             error: 'content missing'
