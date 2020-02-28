@@ -95,7 +95,7 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end();
 });
 
-const port = process.env.port || 3030;
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}/`);
+const PORT = process.env.PORT || 3030;
+app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
 })
